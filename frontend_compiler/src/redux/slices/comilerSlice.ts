@@ -25,11 +25,9 @@ const compilerSlice = createSlice({
         updateCurrLanguage: (state, action: PayloadAction<initialStatetype["currlanguage"]>) => {
             state.currlanguage = action.payload
         },
-        updateCodeValue: (state, action: PayloadAction<{ language: initialStatetype["currlanguage"]; code: string }>) => {
-            const { code, language } = action.payload;
-            state.fullCode[language] = code;
+        updateCodeValue: (state, action: PayloadAction<string>) => {
+            state.fullCode[state.currlanguage] = action.payload;
         },
-
 
     }
 })

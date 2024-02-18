@@ -16,8 +16,8 @@ const HelperHeader = () => {
     const dispathch = useDispatch();
     const currLangValue = useSelector((state: RootState) => state.comilerSlice.currlanguage)
     return (
-        <div className='__helper_header h-[50px] bg-black text-white p-2 flex justify-between items-center'>
-            <div className='__btn_container flex gap-1'>
+        <div className="__helper_header h-[50px] bg-black text-white p-2 flex justify-between items-center">
+            <div className="__btn_container flex gap-1">
                 <Button className='flex justify-center items-center gap-1' variant="success"><Save size={16} /> Save</Button>
                 <Button className='flex justify-center items-center gap-1' variant="secondary"><Share2 size={16} /> Share</Button>
             </div>
@@ -26,7 +26,7 @@ const HelperHeader = () => {
                     Current Language:
                 </p>
                 <Select defaultValue={currLangValue} onValueChange={(value) => dispathch(updateCurrLanguage(value as initialStatetype["currlanguage"]))}>
-                    <SelectTrigger className="w-[180px] bg-gray-800 outline focus:ring-0">
+                    <SelectTrigger className="w-[120px] bg-gray-800 outline focus:ring-0">
                         <SelectValue placeholder="Language" />
                     </SelectTrigger>
                     <SelectContent>

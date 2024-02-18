@@ -11,19 +11,21 @@ const Compile = () => {
     return (
         <ResizablePanelGroup
             direction="horizontal"
-            className=""
+
         >
-            <ResizablePanel defaultSize={50} className="h-[calc(100dvh-60px)] min-w-[350px]">
-                <HelperHeader />
+            <ResizablePanel defaultSize={50} className="h-[calc(100dvh-60px)] min-w-[350px] overflow-auto">
+                <div>
+                    <HelperHeader />
+                </div>
                 <Codeeditor />
             </ResizablePanel>
 
             <ResizableHandle />
 
-
-            <ResizablePanel defaultSize={50}>
+            <ResizablePanel className="h-[calc(100dvh-60px)] min-w-[350px] overflow-auto" defaultSize={50}>
                 <RenderCode />
             </ResizablePanel>
+
         </ResizablePanelGroup>
     )
 }

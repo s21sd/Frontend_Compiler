@@ -11,29 +11,29 @@ const Codeeditor = () => {
     const dispatch = useDispatch();
     const currLangValue = useSelector((state: RootState) => state.comilerSlice.currlanguage);
     const fullCode = useSelector((state: RootState) => state.comilerSlice.fullCode)
+
     const onChange = React.useCallback((val: string) => {
-        dispatch(updateCodeValue({
-            language: currLangValue,
-            code: val
-        }))
+        dispatch(updateCodeValue(val))
     }, []);
     return (
-        <CodeMirror
-            value={fullCode[currLangValue]}
-            height="100vh"
-            width='50vw'
-            extensions={[loadLanguage(currLangValue)!]}
-            onChange={onChange}
-            theme={draculaInit({
-                settings: {
-                    caret: '#c6c6c6',
-                    fontFamily: 'monospace',
-                },
-                styles: [
-                    { tag: t.comment, color: '#6272a4' },
-                ]
-            })}
-        />
+        <div style={{ height: '100vh', overflow: 'auto' }}>
+            <CodeMirror
+                value={fullCode[currLangValue]}
+                height="100vh"
+                width='50vw'
+                extensions={[loadLanguage(currLangValue)!]}
+                onChange={onChange}
+                theme={draculaInit({
+                    settings: {
+                        caret: '#c6c6c6',
+                        fontFamily: 'monospace',
+                    },
+                    styles: [
+                        { tag: t.comment, color: '#6272a4' },
+                    ]
+                })}
+            />
+        </div>
     )
 }
 
