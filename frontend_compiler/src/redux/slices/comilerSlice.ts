@@ -10,7 +10,14 @@ export interface initialStatetype {
 }
 const initialState: initialStatetype = {
     fullCode: {
-        html: "",
+        html: `<html lang="en">
+        <body>
+            <div class="container">
+               <h1>Start Building</h1>
+            </div>
+            <script src="script.js"></script>
+        </body>
+</html>`,
         css: "",
         javascript: "",
     },
