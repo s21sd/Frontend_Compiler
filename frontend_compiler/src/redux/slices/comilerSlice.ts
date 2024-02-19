@@ -18,7 +18,7 @@ const initialState: initialStatetype = {
             <script src="script.js"></script>
         </body>
 </html>`,
-        css: "",
+        css: `body{background:"green"}`,
         javascript: "",
     },
     currlanguage: "html",
@@ -35,9 +35,12 @@ const compilerSlice = createSlice({
         updateCodeValue: (state, action: PayloadAction<string>) => {
             state.fullCode[state.currlanguage] = action.payload;
         },
+        updateFullCode: (state, action: PayloadAction<initialStatetype["fullCode"]>) => {
+            state.fullCode = action.payload;
+        }
 
     }
 })
 
 export default compilerSlice.reducer;
-export const { updateCurrLanguage, updateCodeValue } = compilerSlice.actions;
+export const { updateCurrLanguage, updateCodeValue, updateFullCode } = compilerSlice.actions;

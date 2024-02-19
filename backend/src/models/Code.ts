@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-interface initialStatetype {
+interface IcodeSchema {
     fullCode: {
         html: string,
         css: string,
@@ -7,7 +7,7 @@ interface initialStatetype {
     };
 
 }
-const codeSchema = new mongoose.Schema({
+const codeSchema = new mongoose.Schema<IcodeSchema>({
     fullCode: {
         html: String,
         css: String,
@@ -15,4 +15,4 @@ const codeSchema = new mongoose.Schema({
     },
 })
 
-export const Code = mongoose.model("CodeSchema", codeSchema);
+export const Code = mongoose.model("Code", codeSchema);
