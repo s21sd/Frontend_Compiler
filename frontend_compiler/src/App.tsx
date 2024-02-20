@@ -5,6 +5,8 @@ import Header from './components/Header'
 import { Home } from './pages/Home'
 import Compile from './pages/Compile'
 import { Toaster } from 'sonner'
+import Login from './pages/Login'
+import Signup from './pages/Signup'
 function App() {
 
 
@@ -16,8 +18,9 @@ function App() {
         <Header />
         <Routes>
           <Route path='/' element={<Home />}></Route>
-          <Route path='/compile' element={<Compile />}></Route>
-          <Route path='/compile/:urlId' element={<Compile />}></Route>
+          <Route path='/login' element={<Login />}></Route>
+          <Route path='/signup' element={<Signup />}></Route>
+          <Route path='/compile/:urlId?' element={<Compile />}></Route>
         </Routes>
         {/* <h1 className='bg-red-400'>HII</h1> */}
       </ThemeProvider>

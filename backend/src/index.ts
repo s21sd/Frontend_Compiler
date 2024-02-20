@@ -3,6 +3,7 @@ import cors from 'cors'
 import { config } from 'dotenv';
 import { connectToDB } from './lib/dbConnect';
 import { compileroutes } from './routes/compileroutes';
+import { userRoutes } from './routes/userroutes';
 const app = express();
 
 app.use(express.json());
@@ -11,6 +12,7 @@ config();
 
 connectToDB();
 app.use('/compile', compileroutes)
+app.use('/auth', userRoutes)
 app.get('/', (req: Request, res: Response) => {
     return res.status(200).send("Api is working fine")
 })

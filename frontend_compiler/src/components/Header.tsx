@@ -18,7 +18,22 @@ const Header = () => {
                             Compiler
                         </Button>
                     </Link>
+                </li>
+                <li>
+                    <Link to="/login">
 
+                        <Button variant="default">
+                            Login
+                        </Button>
+                    </Link>
+                </li>
+                <li>
+                    <Link to="/signup">
+
+                        <Button variant="default">
+                            Signup
+                        </Button>
+                    </Link>
                 </li>
             </ul>
         </nav>
