@@ -2,7 +2,10 @@ import { Request, Response } from "express";
 import bcrypt from "bcrypt"
 import jwt from "jsonwebtoken";
 import { User } from "../models/User";
-
+import checkAuth from "../middlewares/checkAuthMiddleware";
+interface AuthenticatedRequest extends Request {
+    user?: any;
+}
 
 export const signup = async (req: Request, res: Response) => {
     const { username, email, password } = req.body;
@@ -39,7 +42,7 @@ export const login = async (req: Request, res: Response) => {
         );
 
         if (!passwordMatched) {
-            return res.status(400).send({ message: "wrong password" });
+            return res.status(400).send({ message: "Wrong password" });
         }
 
         const jwtToken = jwt.sign(
@@ -48,28 +51,33 @@ export const login = async (req: Request, res: Response) => {
                 email: existingUser.email,
             },
             process.env.JWT_KEY!, {
-            expiresIn: "1d"
+            expiresIn: "10m" 
         }
         );
 
         res.cookie("token", jwtToken, {
             path: "/",
-            expires: new Date(Date.now() + 1000 * 60 * 60 * 24),
+            expires: new Date(Date.now() + 1000 * 60 * 10), 
             httpOnly: true,
             sameSite: "lax",
         });
 
-        return res.status(200).send({ existingUser, jwtToken });
+        return res.status(200).send({ message: 'Login successful!', user: existingUser });
     } catch (error) {
-        return res.status(500).send({ message: "Error log in!", error: error });
+        return res.status(500).send({ message: "Error logging in!", error: error });
     }
 };
+
 
 export const logout = async (req: Request, res: Response) => {
     try {
         res.clearCookie("token");
-        return res.status(200).send({ message: "logged out successfully!" });
-    } catch (error) {
+       return res.status(200).send({ message: "logged out successfully!" });
+    } catch (error) { 
         return res.status(500).send({ message: "Error logging out!", error });
     }
 };
+
+
+
+
