@@ -51,17 +51,12 @@ export const login = async (req: Request, res: Response) => {
                 email: existingUser.email,
             },
             process.env.JWT_KEY!, {
-            expiresIn: "10m" 
+            expiresIn: "10m"
         }
         );
 
-        res.cookie("token", jwtToken, {
-            path: "/",
-            expires: new Date(Date.now() + 1000 * 60 * 10), 
-            httpOnly: true,
-            sameSite: "lax",
-        });
-
+        res.cookie('token', jwtToken, { httpOnly: true });
+        
         return res.status(200).send({ message: 'Login successful!', user: existingUser });
     } catch (error) {
         return res.status(500).send({ message: "Error logging in!", error: error });
@@ -72,8 +67,8 @@ export const login = async (req: Request, res: Response) => {
 export const logout = async (req: Request, res: Response) => {
     try {
         res.clearCookie("token");
-       return res.status(200).send({ message: "logged out successfully!" });
-    } catch (error) { 
+        return res.status(200).send({ message: "logged out successfully!" });
+    } catch (error) {
         return res.status(500).send({ message: "Error logging out!", error });
     }
 };

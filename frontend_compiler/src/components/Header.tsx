@@ -15,12 +15,15 @@ const Header = () => {
             let res = await fetch("http://localhost:4000/auth/checklogin", {
                 method: 'GET',
                 credentials: 'include',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
 
             })
-            console.log(res);
+            if (res.ok) {
+                console.log(res)
+                console.log("User already Logged");
+            }
+            else {
+                console.log("Please Login First");
+            }
 
         } catch (error) {
             HandleErrors(error);
