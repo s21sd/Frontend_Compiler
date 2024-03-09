@@ -10,25 +10,21 @@ const Header = () => {
     const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
 
     const checkForLogin = async () => {
-
         try {
-            let res = await fetch("http://localhost:4000/auth/checklogin", {
+            const res = await fetch('http://localhost:4000/auth/checklogin', {
                 method: 'GET',
-                credentials: 'include',
-
-            })
-            if (res.ok) {
-                console.log(res)
-                console.log("User already Logged");
-            }
-            else {
-                console.log("Please Login First");
-            }
-
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                credentials: 'include'
+            });
+    
+            console.log(res);
         } catch (error) {
-            HandleErrors(error);
+            console.log("Error in check Login ", error);
         }
     }
+    
     // useEffect(() => {
     //     checkForLogin();
     // }, []);

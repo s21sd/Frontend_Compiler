@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import bcrypt from "bcrypt"
 import jwt from "jsonwebtoken";
 import { User } from "../models/User";
@@ -45,19 +45,32 @@ export const login = async (req: Request, res: Response) => {
             return res.status(400).send({ message: "Wrong password" });
         }
 
-        const jwtToken = jwt.sign(
-            {
-                _id: existingUser._id,
-                email: existingUser.email,
-            },
-            process.env.JWT_KEY!, {
-            expiresIn: "10m"
-        }
-        );
+        const token = jwt.sign({ id: existingUser._id }, process.env.JWT_KEY!, { expiresIn: '20m' });
 
-        res.cookie('token', jwtToken, { httpOnly: true });
-        
-        return res.status(200).send({ message: 'Login successful!', user: existingUser });
+        res.cookie('token', token, {
+            sameSite: 'none',
+            httpOnly: true,
+            secure: true
+        });
+        res.status(200).json({
+            token,
+            message: "User logged in successfully",
+            user: existingUser
+        });
+
+        // const jwtToken = jwt.sign(
+        //     {
+        //         _id: existingUser._id,
+        //         email: existingUser.email,
+        //     },
+        //     process.env.JWT_KEY!, {
+        //     expiresIn: "20m"
+        // }
+        // );
+
+        // res.cookie('token', jwtToken, { httpOnly: true });
+
+        // return res.status(200).send({ message: 'Login successful!', user: existingUser });
     } catch (error) {
         return res.status(500).send({ message: "Error logging in!", error: error });
     }
@@ -72,6 +85,24 @@ export const logout = async (req: Request, res: Response) => {
         return res.status(500).send({ message: "Error logging out!", error });
     }
 };
+
+
+
+export const checkLogin = (req: Request, res: Response, next: NextFunction) => {
+    checkAuth(req, res, (err) => {
+        if (err) {
+            return res.status(401).json({
+                message: "User is not logged in",
+            });
+        }
+        return res.status(200).json({
+            message: "User is logged in",
+        });
+    });
+};
+
+
+
 
 
 

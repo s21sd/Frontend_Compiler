@@ -44,6 +44,7 @@ const Login = () => {
                 body: JSON.stringify(values)
             })
                 .then(res => {
+                    console.log(res);
                     if (!res.ok) {
                         toast('Failed to login');
                         setLoading(false);
@@ -51,6 +52,7 @@ const Login = () => {
                     return res.json();
                 })
                 .then(data => {
+                    console.log(data)
                     toast("Login Successfull");
                     setLoading(true);
                     setTimeout(() => {
