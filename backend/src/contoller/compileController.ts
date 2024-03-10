@@ -4,6 +4,9 @@ import { Code } from "../models/Code";
 export const saveCode = async (req: Request, res: Response) => {
     // console.log(req.body);
     const { html, css, javascript } = req.body;
+    if (!html && !css && !javascript) {
+        return res.status(404).send({ message: "Code can not be blank!" })
+    }
     // console.log(html, css, javascript);
     try {
         const newCode = await Code.create({

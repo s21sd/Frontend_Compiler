@@ -1,5 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react"
 import { initialStatetype } from "./slices/comilerSlice"
+import { url } from "inspector"
 export const api = createApi({
     baseQuery: fetchBaseQuery({
         baseUrl: 'http://localhost:4000'
@@ -16,8 +17,17 @@ export const api = createApi({
 
                 }
             })
+        }),
+
+        loadCode: builder.mutation<{ fullcode: initialStatetype["fullCode"] }, { urlId: string }>({
+            query: (body) => ({
+                url: '/compile/load',
+                method:"POST",
+                body:body
+
+            })
         })
     })
 })
 
-export const { useSaveCodeMutation } = api
+export const { useSaveCodeMutation ,useLoadCodeMutation} = api

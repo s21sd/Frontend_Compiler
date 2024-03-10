@@ -6,31 +6,27 @@ import {
     ResizablePanel,
     ResizablePanelGroup,
 } from "@/components/ui/resizable"
+import { useLoadCodeMutation } from "@/redux/api"
 import { updateFullCode } from "@/redux/slices/comilerSlice"
 import { HandleErrors } from "@/utils/HandleErrors"
-import axios from "axios"
 import { useEffect } from "react"
 import { useDispatch } from "react-redux"
 import { useParams } from "react-router-dom"
-import { toast } from "sonner"
 const Compile = () => {
     const dispatch = useDispatch()
     const { urlId } = useParams();
+    const [loadExistingCode, { isLoading }] = useLoadCodeMutation();
 
     const loadCode = async () => {
         try {
-            const response = await axios.post("http://localhost:4000/compile/load", {
-                urlId: urlId
-            })
-            console.log(response.data)
-            dispatch(updateFullCode(response.data.fullcode))
-            console.log(response)
-        } catch (error) {
-            if (axios.isAxiosError(error)) {
-                if (error?.response?.status === 500) {
-                    toast("Invalid Url,Default Code Loaded")
-                }
+            if (urlId) {
+                const res = await loadExistingCode({ urlId }).unwrap();
+                dispatch(updateFullCode(res.fullcode))
+
             }
+
+        } catch (error) {
+           
             HandleErrors(error)
         }
 
