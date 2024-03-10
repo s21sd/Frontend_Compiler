@@ -2,7 +2,8 @@ import { Request, Response } from "express";
 import { Code } from "../models/Code";
 
 export const saveCode = async (req: Request, res: Response) => {
-    const { html, css, javascript } = req.body.fullcode;
+    // console.log(req.body);
+    const { html, css, javascript } = req.body;
     // console.log(html, css, javascript);
     try {
         const newCode = await Code.create({

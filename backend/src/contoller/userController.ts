@@ -45,32 +45,32 @@ export const login = async (req: Request, res: Response) => {
             return res.status(400).send({ message: "Wrong password" });
         }
 
-        const token = jwt.sign({ id: existingUser._id }, process.env.JWT_KEY!, { expiresIn: '20m' });
+        // const token = jwt.sign({ id: existingUser._id }, process.env.JWT_KEY!, { expiresIn: '20m' });
 
-        res.cookie('token', token, {
-            sameSite: 'none',
-            httpOnly: true,
-            secure: true
-        });
-        res.status(200).json({
-            token,
-            message: "User logged in successfully",
-            user: existingUser
-        });
+        // res.cookie('token', token, {
+        //     sameSite: 'none',
+        //     httpOnly: true,
+        //     secure: true
+        // });
+        // res.status(200).json({
+        //     token,
+        //     message: "User logged in successfully",
+        //     user: existingUser
+        // });
 
-        // const jwtToken = jwt.sign(
-        //     {
-        //         _id: existingUser._id,
-        //         email: existingUser.email,
-        //     },
-        //     process.env.JWT_KEY!, {
-        //     expiresIn: "20m"
-        // }
-        // );
+        const jwtToken = jwt.sign(
+            {
+                _id: existingUser._id,
+                email: existingUser.email,
+            },
+            process.env.JWT_KEY!, {
+            expiresIn: "20m"
+        }
+        );
 
-        // res.cookie('token', jwtToken, { httpOnly: true });
+        res.cookie('token', jwtToken, { httpOnly: true });
 
-        // return res.status(200).send({ message: 'Login successful!', user: existingUser });
+        return res.status(200).send({ message: 'Login successful!', user: existingUser });
     } catch (error) {
         return res.status(500).send({ message: "Error logging in!", error: error });
     }

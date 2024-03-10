@@ -28,6 +28,7 @@ import { HandleErrors } from '@/utils/HandleErrors'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { toast } from 'sonner'
+import { useSaveCodeMutation } from '@/redux/api'
 const HelperHeader = () => {
     const { urlId } = useParams();
     const dispathch = useDispatch();
@@ -36,6 +37,7 @@ const HelperHeader = () => {
     const fullCode = useSelector((state: RootState) => state.comilerSlice.fullCode);
     const [saveLoading, setSaveLoading] = useState<boolean>(false);
     const [shareBtn, setShareBtn] = useState<boolean>(false);
+    const [saveCode, { isLoading, data }] = useSaveCodeMutation();
     useEffect(() => {
         if (urlId) {
             setShareBtn(true)
@@ -46,18 +48,21 @@ const HelperHeader = () => {
     }, [urlId])
 
     const HandleSave = async () => {
-        setSaveLoading(true)
+        // setSaveLoading(true)
         try {
-            const response = await axios.post("http://localhost:4000/compile/save", {
-                fullcode: {
-                    "html": fullCode.html,
-                    "css": fullCode.css,
-                    "javascript": fullCode.javascript
-                }
-            })
-            navigator(`/compile/${response.data.url}`, { replace: true })
-            setSaveLoading(false)
-            console.log(response.data);
+            // const response = await axios.post("http://localhost:4000/compile/save", {
+            //     fullcode: {
+            //         "html": fullCode.html,
+            //         "css": fullCode.css,
+            //         "javascript": fullCode.javascript
+            //     }
+            // })
+            // navigator(`/compile/${response.data.url}`, { replace: true })
+            await saveCode(fullCode).unwrap();
+            console.log(data);
+            // setSaveLoading(false)
+            // console.log(response.data);
+
         } catch (error) {
             HandleErrors(error);
         }
