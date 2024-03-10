@@ -17,12 +17,14 @@ import { toast } from "sonner"
 import { useNavigate } from "react-router-dom"
 import { HandleErrors } from "@/utils/HandleErrors"
 import { useState } from "react"
+import { useLoginMutation } from "@/redux/api"
 const formSchema = z.object({
     email: z.string().email(),
     password: z.string()
 })
 
 const Login = () => {
+    const [login, { isLoading }] = useLoginMutation()
     const [loading, setLoading] = useState<boolean>(false)
     const navigator = useNavigate();
     const form = useForm<z.infer<typeof formSchema>>({
@@ -33,35 +35,17 @@ const Login = () => {
         },
     })
 
-    function handleLogin(values: z.infer<typeof formSchema>) {
+    const handleLogin = async (values: z.infer<typeof formSchema>) => {
         setLoading(true);
         try {
-            fetch("http://localhost:4000/auth/login", {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(values)
-            })
-                .then(res => {
-                    console.log(res);
-                    if (!res.ok) {
-                        toast('Failed to login');
-                        setLoading(false);
-                    }
-                    return res.json();
-                })
-                .then(data => {
-                    console.log(data)
-                    toast("Login Successfull");
-                    setLoading(true);
-                    setTimeout(() => {
-                        navigator('/compile');
-                    }, 2000);
-                })
-                .catch(error => {
-                    toast(error);
-                });
+            const res = await login(values).unwrap();
+            console.log(res);
+            toast("Login Successfull");
+            setLoading(false);
+            setTimeout(() => {
+                navigator('/compile');
+            }, 2000);
+
         } catch (error) {
             HandleErrors(error);
         }

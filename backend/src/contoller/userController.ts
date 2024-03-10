@@ -44,20 +44,6 @@ export const login = async (req: Request, res: Response) => {
         if (!passwordMatched) {
             return res.status(400).send({ message: "Wrong password" });
         }
-
-        // const token = jwt.sign({ id: existingUser._id }, process.env.JWT_KEY!, { expiresIn: '20m' });
-
-        // res.cookie('token', token, {
-        //     sameSite: 'none',
-        //     httpOnly: true,
-        //     secure: true
-        // });
-        // res.status(200).json({
-        //     token,
-        //     message: "User logged in successfully",
-        //     user: existingUser
-        // });
-
         const jwtToken = jwt.sign(
             {
                 _id: existingUser._id,
@@ -70,7 +56,7 @@ export const login = async (req: Request, res: Response) => {
 
         res.cookie('token', jwtToken, { httpOnly: true });
 
-        return res.status(200).send({ message: 'Login successful!', user: existingUser });
+        return res.status(200).send({ username: existingUser.username, picture: existingUser.picture, email: existingUser.email, savedCodes: existingUser.savedCodes, message: 'Login successful!' });
     } catch (error) {
         return res.status(500).send({ message: "Error logging in!", error: error });
     }
