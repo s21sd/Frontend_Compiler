@@ -1,34 +1,33 @@
 
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { Button } from './ui/button'
 import { Codesandbox } from 'lucide-react'
-import { useEffect, useState } from 'react'
-import { toast } from 'sonner'
+import { useDispatch, useSelector } from 'react-redux'
+import { RootState } from '@/redux/store'
+import { useLogoutMutation } from '@/redux/api'
+import { updateCurrentUser, updateIsLoggedIn } from '@/redux/slices/appSlice'
 import { HandleErrors } from '@/utils/HandleErrors'
+import { toast } from 'sonner'
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 
 const Header = () => {
-    const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
-
-    const checkForLogin = async () => {
+    const navigator = useNavigate();
+    const [logout] = useLogoutMutation();
+    const isLoggedIn = useSelector((state: RootState) => state.appSlice.isLoggedIn)
+    const currUser = useSelector((state: RootState) => state.appSlice.currentUser)
+    const dispatch = useDispatch();
+    const handleLogout = async () => {
         try {
-            const res = await fetch('http://localhost:4000/auth/checklogin', {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                credentials: 'include'
-            });
-    
-            console.log(res);
+            const res = await logout().unwrap();
+            toast("logged out successfully!");
+            navigator('/');
+            dispatch(updateIsLoggedIn(false));
+            dispatch(updateCurrentUser({}))
         } catch (error) {
-            console.log("Error in check Login ", error);
+
+            HandleErrors(error);
         }
     }
-    
-    // useEffect(() => {
-    //     checkForLogin();
-    // }, []);
-
     return (
         <nav className='w-full h-[80px] bg-gray-900 text-white p-6 flex justify-between items-center'>
             <Link to="/">
@@ -46,23 +45,39 @@ const Header = () => {
                         </Button>
                     </Link>
                 </li>
-                <li>
-                    <Link to="/login">
-
-                        <Button variant="default">
-                            Login
+                {
+                    isLoggedIn ? (<div className='flex gap-2'>
+                        <Button onClick={handleLogout} variant="destructive">
+                            Logout
                         </Button>
-                    </Link>
-                </li>
-                <li>
-                    <Link to="/signup">
+                        <Avatar>
+                            <AvatarImage src={currUser.picture} />
+                            <AvatarFallback className='capitalize'>{currUser.username?.slice(0, 1)}</AvatarFallback>
+                        </Avatar>
 
-                        <Button variant="default">
-                            Signup
-                        </Button>
-                    </Link>
-                </li>
-                <Button onClick={checkForLogin}>CheckLogin</Button>
+                    </div>) : (
+                        <>
+                            <li>
+                                <Link to="/login">
+
+                                    <Button variant="default">
+                                        Login
+                                    </Button>
+                                </Link>
+                            </li>
+                            <li>
+                                <Link to="/signup">
+
+                                    <Button variant="default">
+                                        Signup
+                                    </Button>
+                                </Link>
+                            </li>
+                        </>
+
+                    )
+                }
+
             </ul>
         </nav>
     )

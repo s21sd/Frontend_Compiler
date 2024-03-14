@@ -30,12 +30,20 @@ export const api = createApi({
 
         login: builder.mutation<UserInfoType, loginCredentialType>({
             query: (body) => ({
-                url: "/user/login",
+                url: "/auth/login",
                 method: 'POST',
-                body: body
+                body: body,
+                credentials: 'include'
+            })
+        }),
+        logout: builder.mutation<void, void>({
+            query: () => ({
+                url: "/auth/logout",
+                method: 'POST',
+
             })
         })
     })
 })
 
-export const { useSaveCodeMutation, useLoadCodeMutation, useLoginMutation } = api
+export const { useSaveCodeMutation, useLoadCodeMutation, useLoginMutation, useLogoutMutation } = api

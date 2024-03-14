@@ -18,13 +18,16 @@ import { useNavigate } from "react-router-dom"
 import { HandleErrors } from "@/utils/HandleErrors"
 import { useState } from "react"
 import { useLoginMutation } from "@/redux/api"
+import { useDispatch } from "react-redux"
+import { updateCurrentUser, updateIsLoggedIn } from "@/redux/slices/appSlice"
 const formSchema = z.object({
     email: z.string().email(),
     password: z.string()
 })
 
 const Login = () => {
-    const [login, { isLoading }] = useLoginMutation()
+    const [login] = useLoginMutation()
+    const dispatch = useDispatch();
     const [loading, setLoading] = useState<boolean>(false)
     const navigator = useNavigate();
     const form = useForm<z.infer<typeof formSchema>>({
@@ -39,7 +42,8 @@ const Login = () => {
         setLoading(true);
         try {
             const res = await login(values).unwrap();
-            console.log(res);
+            dispatch(updateCurrentUser(res));
+            dispatch(updateIsLoggedIn(true))
             toast("Login Successfull");
             setLoading(false);
             setTimeout(() => {
@@ -47,9 +51,9 @@ const Login = () => {
             }, 2000);
 
         } catch (error) {
+            setLoading(false);
             HandleErrors(error);
         }
-        console.log(values)
     }
     return (
         <div className='__login grid-bg w-full h-[calc(100vh-60px)] flex flex-col justify-center items-center gap-2'>
