@@ -7,7 +7,16 @@ import Compile from './pages/Compile'
 import { Toaster } from 'sonner'
 import Login from './pages/Login'
 import Signup from './pages/Signup'
+import { useEffect } from 'react'
+import { useGetUserDetailsQuery } from './redux/api'
 function App() {
+  const { data, isError, isSuccess } = useGetUserDetailsQuery();
+  useEffect(() => {
+    console.log("data", data);
+    console.log("isError", isError);
+    console.log("isSuccess", isSuccess);
+
+  }, [data])
 
 
   return (

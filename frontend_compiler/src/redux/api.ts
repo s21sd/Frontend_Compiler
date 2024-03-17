@@ -1,5 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react"
 import { initialStatetype } from "./slices/comilerSlice"
+import { url } from "inspector"
 
 export const api = createApi({
     baseQuery: fetchBaseQuery({
@@ -42,8 +43,11 @@ export const api = createApi({
                 method: 'POST',
 
             })
+        }),
+        getUserDetails: builder.query<UserInfoType, void>({
+            query: () => ({ url: "/auth/userDetails", cache: "no-store" ,method:'GET'})
         })
     })
 })
 
-export const { useSaveCodeMutation, useLoadCodeMutation, useLoginMutation, useLogoutMutation } = api
+export const { useSaveCodeMutation, useLoadCodeMutation, useLoginMutation, useLogoutMutation, useGetUserDetailsQuery } = api
