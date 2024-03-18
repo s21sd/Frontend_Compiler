@@ -9,6 +9,8 @@ import Login from './pages/Login'
 import Signup from './pages/Signup'
 import { useEffect } from 'react'
 import { useGetUserDetailsQuery } from './redux/api'
+import Mycodes from './pages/Mycodes'
+import Allcodes from './pages/Allcodes'
 function App() {
   const { data, isError, isSuccess } = useGetUserDetailsQuery();
   useEffect(() => {
@@ -29,6 +31,8 @@ function App() {
           <Route path='/' element={<Home />}></Route>
           <Route path='/login' element={<Login />}></Route>
           <Route path='/signup' element={<Signup />}></Route>
+          <Route path='/all-codes' element={<Allcodes />}></Route>
+          <Route path='/my-codes' element={<Mycodes />}></Route>
           <Route path='/compile/:urlId?' element={<Compile />}></Route>
         </Routes>
         {/* <h1 className='bg-red-400'>HII</h1> */}

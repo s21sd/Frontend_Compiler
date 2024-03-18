@@ -1,5 +1,5 @@
 import { Button } from './ui/button'
-import { Code, Loader, Save, Share2 } from "lucide-react"
+import { Code, Download, Loader, Save, Share2 } from "lucide-react"
 import {
     Select,
     SelectContent,
@@ -49,15 +49,63 @@ const HelperHeader = () => {
     const HandleSave = async () => {
         setSaveLoading(true)
         try {
-            const res= await saveCode(fullCode).unwrap();
+            const res = await saveCode(fullCode).unwrap();
             setSaveLoading(false)
             navigator(`/compile/${res.url}`, { replace: true })
-            
+
 
         } catch (error) {
-           
+
             setSaveLoading(false)
             HandleErrors(error);
+        }
+    }
+    const downloadAllTheCodes = async () => {
+        if (fullCode.html === "" && fullCode.css === "" && fullCode.javascript === "") {
+            toast("Error: Code is Empty")
+        } else {
+
+            const htmlCode = new Blob([fullCode.html], { type: 'text/html' })
+            const cssCode = new Blob([fullCode.css], { type: 'text/css' })
+            const jsCode = new Blob([fullCode.javascript], { type: 'text/javascript' })
+
+            const htmlLink = document.createElement('a');
+            const cssLink = document.createElement('a');
+            const javascriptLink = document.createElement('a');
+
+            htmlLink.href = URL.createObjectURL(htmlCode)
+            htmlLink.download = "index.html";
+            document.body.appendChild(htmlLink);
+
+
+            cssLink.href = URL.createObjectURL(cssCode)
+            cssLink.download = "styles.css";
+            document.body.appendChild(cssLink);
+
+
+            javascriptLink.href = URL.createObjectURL(jsCode)
+            javascriptLink.download = "script.js";
+            document.body.appendChild(javascriptLink);
+
+
+            if (fullCode.html !== "") {
+
+                htmlLink.click();
+            }
+            if (fullCode.css !== "") {
+
+                cssLink.click();
+            }
+            if (fullCode.javascript !== "") {
+
+                javascriptLink.click();
+            }
+
+            document.body.removeChild(htmlLink)
+            document.body.removeChild(cssLink)
+            document.body.removeChild(javascriptLink)
+
+            toast("Code Downloaded Successfully!")
         }
     }
 
@@ -70,12 +118,14 @@ const HelperHeader = () => {
         <div className="__helper_header h-[50px] bg-black text-white p-2 flex justify-between items-center">
             <div className="__btn_container flex gap-1">
 
-                <Button onClick={HandleSave} className='flex justify-center items-center gap-1' variant="success"> {saveLoading ? <><Loader size={16} />saving</> : <> <Save size={16} /> Save</>}</Button>
+                <Button onClick={HandleSave} className='flex justify-center items-center gap-1' variant="success"> {saveLoading ? <><Loader size={16} /></> : <> <Save size={16} /></>}</Button>
+                <Button><Download onClick={downloadAllTheCodes} size={16} /></Button>
+
 
                 {
                     shareBtn && <Dialog>
                         <DialogTrigger asChild>
-                            <Button className='flex justify-center items-center gap-1' variant="secondary"><Share2 size={16} /> Share</Button>
+                            <Button className='flex justify-center items-center gap-1' variant="secondary"><Share2 size={16} /></Button>
                         </DialogTrigger>
                         <DialogContent className="sm:max-w-md">
                             <DialogHeader>

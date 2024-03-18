@@ -45,8 +45,22 @@ const Header = () => {
                         </Button>
                     </Link>
                 </li>
+                <li>
+                    <Link to="/all-codes">
+
+                        <Button variant="secondary">
+                            All Codes
+                        </Button>
+                    </Link>
+                </li>
                 {
                     isLoggedIn ? (<div className='flex gap-2'>
+                        <Link to="/my-codes">
+
+                            <Button variant="secondary">
+                                My Codes
+                            </Button>
+                        </Link>
                         <Button onClick={handleLogout} variant="destructive">
                             Logout
                         </Button>

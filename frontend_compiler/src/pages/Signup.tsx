@@ -22,7 +22,9 @@ import { Codesandbox, Loader } from "lucide-react"
 import { HandleErrors } from "@/utils/HandleErrors"
 import { toast } from "sonner"
 import { useState } from "react"
+import { useSignupMutation } from "@/redux/api"
 const Signup = () => {
+    const [signup] = useSignupMutation();
     const [loading, setLoading] = useState<boolean>(false)
     const navigator = useNavigate();
     const form = useForm<z.infer<typeof formSchema>>({
@@ -33,35 +35,21 @@ const Signup = () => {
             password: ""
         },
     })
-    function handleSignup(values: z.infer<typeof formSchema>) {
+    async function handleSignup(values: z.infer<typeof formSchema>) {
         setLoading(true);
         try {
-            fetch("http://localhost:4000/auth/signup", {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(values)
-            })
-                .then(res => {
-                    if (!res.ok) {
-                        toast('Failed to sign up');
-                        setLoading(false);
-                    }
-                    return res.json();
-                })
-                .then(data => {
+            const res = await signup(values).unwrap();
+            if (res) {
+                toast("Sign Up Successfull");
+                setTimeout(() => {
+                    setLoading(false)
+                    navigator('/login');
+                }, 2000);
+            }
+            console.log(res);
 
-                    toast("Sign Up Successfull");
-                    setTimeout(() => {
-                        setLoading(false)
-                        navigator('/login');
-                    }, 2000);
-                })
-                .catch(error => {
-                    toast(error);
-                });
         } catch (error) {
+            setLoading(false)
             HandleErrors(error);
         }
     }
