@@ -18,6 +18,7 @@ const Header = () => {
     const dispatch = useDispatch();
     const handleLogout = async () => {
         try {
+            localStorage.removeItem('token');
             const res = await logout().unwrap();
             toast("logged out successfully!");
             navigator('/');

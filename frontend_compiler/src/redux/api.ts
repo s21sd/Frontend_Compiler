@@ -1,20 +1,30 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react"
 import { initialStatetype } from "./slices/comilerSlice"
-import { url } from "inspector"
 
 export const api = createApi({
     baseQuery: fetchBaseQuery({
-        baseUrl: 'http://localhost:4000'
+        baseUrl: 'http://localhost:4000',
+        prepareHeaders: (headers) => {
+            const token = localStorage.getItem('token');
+            if (token) {
+                headers.set('Authorization', `Bearer ${token}`);
+            }
+            else {
+                headers.delete('Authorization');
+            }
+            return headers;
+        }
     }),
     endpoints: (builder) => ({
-        saveCode: builder.mutation<{ url: string, status: string }, initialStatetype["fullCode"]>({
+        saveCode: builder.mutation<{ url: string, status: string }, { fullCode: initialStatetype["fullCode"], title: string }>({
             query: (fullCode) => ({
                 url: "/compile/save",
                 method: 'POST',
                 body: {
-                    "html": fullCode.html,
-                    "css": fullCode.css,
-                    "js": fullCode.javascript
+                    "html": fullCode.fullCode.html,
+                    "css": fullCode.fullCode.css,
+                    "js": fullCode.fullCode.javascript,
+                    title: fullCode.title
 
                 }
             })
@@ -54,7 +64,11 @@ export const api = createApi({
         }),
         getUserDetails: builder.query<UserInfoType, void>({
             query: () => ({ url: "/auth/userDetails", cache: "no-store", method: 'GET' })
-        })
+        }),
+        getMyCodes: builder.query<{fullcode:initialStatetype["fullCode"]},void>({
+            query: () => "/user/my-codes",
+            providesTags: ["myCodes"],
+        }),
     })
 })
 

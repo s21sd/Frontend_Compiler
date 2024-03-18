@@ -57,7 +57,7 @@ export const login = async (req: Request, res: Response) => {
 
         res.cookie('token', jwtToken, { httpOnly: true });
 
-        return res.status(200).send({ username: existingUser.username, picture: existingUser.picture, email: existingUser.email, savedCodes: existingUser.savedCodes, message: 'Login successful!' });
+        return res.status(200).send({ token: jwtToken, username: existingUser.username, picture: existingUser.picture, email: existingUser.email, savedCodes: existingUser.savedCodes, message: 'Login successful!' });
     } catch (error) {
         return res.status(500).send({ message: "Error logging in!", error: error });
     }
@@ -90,23 +90,3 @@ export const userDetails = async (req: AuthRequest, res: Response) => {
         return res.status(500).send({ message: "Cannot fetch user details" });
     }
 }
-
-// export const checkLogin = (req: Request, res: Response, next: NextFunction) => {
-//     checkAuth(req, res, (err) => {
-//         if (err) {
-//             return res.status(401).json({
-//                 message: "User is not logged in",
-//             });
-//         }
-//         return res.status(200).json({
-//             message: "User is logged in",
-//         });
-//     });
-// };
-
-
-
-
-
-
-

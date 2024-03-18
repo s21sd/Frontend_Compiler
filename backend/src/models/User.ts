@@ -4,7 +4,7 @@ interface IUserSchema {
     email: string
     password: string
     picture: string
-    savedCodes: Array<{ id: string }>
+    savedCodes: Array<mongoose.Types.ObjectId>
 }
 const UserSchema = new mongoose.Schema<IUserSchema>(
     {
@@ -30,8 +30,7 @@ const UserSchema = new mongoose.Schema<IUserSchema>(
             default: "https://t4.ftcdn.net/jpg/00/64/67/27/360_F_64672736_U5kpdGs9keUll8CRQ3p3YaEv2M6qkVY5.jpg"
         },
         savedCodes: [
-            { type: mongoose.Schema.Types.ObjectId }
-        ]
+            { type: mongoose.Schema.Types.ObjectId, ref: "Code" }],
     },
     { timestamps: true }
 );

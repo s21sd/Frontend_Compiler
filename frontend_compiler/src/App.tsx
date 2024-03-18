@@ -11,12 +11,20 @@ import { useEffect } from 'react'
 import { useGetUserDetailsQuery } from './redux/api'
 import Mycodes from './pages/Mycodes'
 import Allcodes from './pages/Allcodes'
+import { useDispatch } from 'react-redux'
+import { updateCurrentUser, updateIsLoggedIn } from './redux/slices/appSlice'
 function App() {
-  const { data, isError, isSuccess } = useGetUserDetailsQuery();
+  const { data, error } = useGetUserDetailsQuery();
+  const dispatch = useDispatch();
   useEffect(() => {
-    console.log("data", data);
-    console.log("isError", isError);
-    console.log("isSuccess", isSuccess);
+    if (data) {
+      dispatch(updateCurrentUser(data));
+      dispatch(updateIsLoggedIn(true));
+    }
+    else if (error) {
+      dispatch(updateCurrentUser({}));
+      dispatch(updateIsLoggedIn(false));
+    }
 
   }, [data])
 

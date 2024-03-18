@@ -5,6 +5,7 @@ interface UserInfoType {
     picture: string,
     email: string,
     savedCodes: Array<string>
+    token: string
 }
 interface loginCredentialType {
     email: string,

@@ -42,6 +42,10 @@ const Login = () => {
         setLoading(true);
         try {
             const res = await login(values).unwrap();
+            // console.log(res.token);
+            if (res.token) {
+                localStorage.setItem('token', res.token);
+            }
             dispatch(updateCurrentUser(res));
             dispatch(updateIsLoggedIn(true))
             toast("Login Successfull");

@@ -36,7 +36,8 @@ const HelperHeader = () => {
     const fullCode = useSelector((state: RootState) => state.comilerSlice.fullCode);
     const [saveLoading, setSaveLoading] = useState<boolean>(false);
     const [shareBtn, setShareBtn] = useState<boolean>(false);
-    const [saveCode, { isLoading }] = useSaveCodeMutation();
+    const [title, setTitle] = useState<string>('My Code');
+    const [saveCode] = useSaveCodeMutation();
     useEffect(() => {
         if (urlId) {
             setShareBtn(true)
@@ -49,9 +50,10 @@ const HelperHeader = () => {
     const HandleSave = async () => {
         setSaveLoading(true)
         try {
-            const res = await saveCode(fullCode).unwrap();
+            const res = await saveCode({ fullCode, title }).unwrap();
             setSaveLoading(false)
             navigator(`/compile/${res.url}`, { replace: true })
+            toast("Code Saved Successfully!")
 
 
         } catch (error) {
@@ -118,7 +120,30 @@ const HelperHeader = () => {
         <div className="__helper_header h-[50px] bg-black text-white p-2 flex justify-between items-center">
             <div className="__btn_container flex gap-1">
 
-                <Button onClick={HandleSave} className='flex justify-center items-center gap-1' variant="success"> {saveLoading ? <><Loader size={16} /></> : <> <Save size={16} /></>}</Button>
+
+                <Dialog>
+                    <DialogTrigger asChild>
+                        <Button variant="success"> {saveLoading ? <><Loader size={16} /></> : <> <Save size={16} /></>}</Button>
+
+                    </DialogTrigger>
+                    <DialogContent className="sm:max-w-md">
+                        <DialogHeader>
+                            <DialogTitle><div className='flex justify-center items-center gap-1'>
+
+                                <Code />  Save your Code! </div> </DialogTitle>
+
+                        </DialogHeader>
+                        <div className="flex items-center space-x-2">
+                            <div className="grid flex-1 gap-2">
+                                <Input onChange={(e) => setTitle(e.target.value)} placeholder='Type Your Post Title' value={title} />
+                            </div>
+                            <Button onClick={HandleSave} type="submit" size="sm" className="px-3">
+                                Save
+                            </Button>
+                        </div>
+                    </DialogContent>
+                </Dialog>
+
                 <Button><Download onClick={downloadAllTheCodes} size={16} /></Button>
 
 
