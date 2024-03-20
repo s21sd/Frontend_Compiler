@@ -1,8 +1,7 @@
 import { Code, Trash2 } from "lucide-react";
-// import { Separator } from "@/components/ui/separator";
+import { Separator } from "@/components/ui/separator";
 import { Button } from "./ui/button";
 import { Link } from "react-router-dom";
-// import { codeType } from "@/vite-env";
 import {
     Dialog,
     DialogContent,
@@ -10,8 +9,8 @@ import {
     DialogTitle,
     DialogTrigger,
 } from "./ui/dialog";
-// import { handleError } from "@/utils/handleError";
-// import { useDeleteCodeMutation } from "@/redux/slices/api";
+import { HandleErrors } from "@/utils/HandleErrors";
+import { useDeleteCodeMutation } from "@/redux/api";
 
 export default function CodeItem({
     data,
@@ -20,13 +19,15 @@ export default function CodeItem({
     data: codeType;
     deleteBtn: boolean;
 }) {
-    const [deleteCode, { isLoading }] = useDeleteCodeMutation();
+    console.log(data);
+    // const { fullCode } = data;
+    const [deleteCode] = useDeleteCodeMutation();
     const handleDelete = async () => {
         try {
             const response = await deleteCode(data._id!).unwrap();
             console.log(response);
         } catch (error) {
-            handleError(error);
+            HandleErrors(error);
         }
     };
     return (
@@ -43,7 +44,7 @@ export default function CodeItem({
                 {deleteBtn && (
                     <Dialog>
                         <DialogTrigger asChild>
-                            <Button variant="destructive" loading={false}>
+                            <Button variant="destructive">
                                 Delete
                             </Button>
                         </DialogTrigger>
@@ -62,7 +63,7 @@ export default function CodeItem({
                                         variant="destructive"
                                         className="h-full"
                                         onClick={handleDelete}
-                                        loading={isLoading}
+
                                     >
                                         Confirm Delete
                                     </Button>

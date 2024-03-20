@@ -15,22 +15,26 @@ export const api = createApi({
             return headers;
         }
     }),
+    tagTypes: ["myCodes", "allCodes"],
     endpoints: (builder) => ({
         saveCode: builder.mutation<{ url: string, status: string }, { fullCode: initialStatetype["fullCode"], title: string }>({
-            query: (fullCode) => ({
-                url: "/compile/save",
-                method: 'POST',
-                body: {
-                    "html": fullCode.fullCode.html,
-                    "css": fullCode.fullCode.css,
-                    "js": fullCode.fullCode.javascript,
-                    title: fullCode.title
+            query: (fullCode) => {
+                return {
+                    url: "/compile/save",
+                    method: 'POST',
+                    body: {
+                        "html": fullCode.fullCode.html,
+                        "css": fullCode.fullCode.css,
+                        "js": fullCode.fullCode.javascript,
+                        title: fullCode.title
 
-                }
-            })
+                    }
+                };
+            },
+            invalidatesTags: ["myCodes"],
         }),
 
-        loadCode: builder.mutation<{ fullcode: initialStatetype["fullCode"] }, { urlId: string }>({
+        loadCode: builder.mutation<{ fullCode: initialStatetype["fullCode"] }, { urlId: string }>({
             query: (body) => ({
                 url: '/compile/load',
                 method: "POST",
@@ -65,11 +69,30 @@ export const api = createApi({
         getUserDetails: builder.query<UserInfoType, void>({
             query: () => ({ url: "/auth/userDetails", cache: "no-store", method: 'GET' })
         }),
-        getMyCodes: builder.query<{fullcode:initialStatetype["fullCode"]},void>({
-            query: () => "/user/my-codes",
+        getMyCodes: builder.query<{ fullCode: initialStatetype["fullCode"] }, void>({
+            query: () => "/auth/my-codes",
             providesTags: ["myCodes"],
+        }),
+        deleteCode: builder.mutation<void, string>({
+            query: (_id) => ({
+                url: `/compile/delete/${_id}`,
+                method: "DELETE",
+            }),
+            invalidatesTags: ["myCodes", "allCodes"],
+        }),
+        editCode: builder.mutation<
+            void,
+            { fullCode: initialStatetype["fullCode"]; id: string }
+        >({
+            query: ({ fullCode, id }) => {
+                return {
+                    url: `/compile/edit/${id}`,
+                    method: "PUT",
+                    body: fullCode,
+                };
+            },
         }),
     })
 })
 
-export const { useSaveCodeMutation, useLoadCodeMutation, useLoginMutation, useSignupMutation, useLogoutMutation, useGetUserDetailsQuery } = api
+export const { useSaveCodeMutation, useLoadCodeMutation, useLoginMutation, useSignupMutation, useLogoutMutation, useGetUserDetailsQuery, useGetMyCodesQuery, useDeleteCodeMutation, useEditCodeMutation } = api
