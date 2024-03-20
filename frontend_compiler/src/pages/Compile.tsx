@@ -7,7 +7,7 @@ import {
     ResizablePanelGroup,
 } from "@/components/ui/resizable"
 import { useLoadCodeMutation } from "@/redux/api"
-import { updateFullCode } from "@/redux/slices/comilerSlice"
+import { updateFullCode, updateIsOwner } from "@/redux/slices/comilerSlice"
 import { HandleErrors } from "@/utils/HandleErrors"
 import { useEffect } from "react"
 import { useDispatch } from "react-redux"
@@ -15,18 +15,19 @@ import { useParams } from "react-router-dom"
 const Compile = () => {
     const dispatch = useDispatch()
     const { urlId } = useParams();
-    const [loadExistingCode, { isLoading }] = useLoadCodeMutation();
+    const [loadExistingCode] = useLoadCodeMutation();
 
     const loadCode = async () => {
         try {
             if (urlId) {
                 const res = await loadExistingCode({ urlId }).unwrap();
-                dispatch(updateFullCode(res.fullcode))
+                dispatch(updateFullCode(res.fullCode))
+                dispatch(updateIsOwner(res.isOwner))
 
             }
 
         } catch (error) {
-           
+
             HandleErrors(error)
         }
 

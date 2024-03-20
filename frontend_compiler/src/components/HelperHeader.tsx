@@ -1,5 +1,5 @@
 import { Button } from './ui/button'
-import { Code, Download, Loader, Save, Share2 } from "lucide-react"
+import { Code, Download, Loader, PencilLine, Save, Share2 } from "lucide-react"
 import {
     Select,
     SelectContent,
@@ -27,7 +27,7 @@ import { HandleErrors } from '@/utils/HandleErrors'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { toast } from 'sonner'
-import { useSaveCodeMutation } from '@/redux/api'
+import { useEditCodeMutation, useSaveCodeMutation } from '@/redux/api'
 const HelperHeader = () => {
     const { urlId } = useParams();
     const dispathch = useDispatch();
@@ -38,6 +38,8 @@ const HelperHeader = () => {
     const [shareBtn, setShareBtn] = useState<boolean>(false);
     const [title, setTitle] = useState<string>('My Code');
     const [saveCode] = useSaveCodeMutation();
+    const [editCode] = useEditCodeMutation();
+    const isOwner = useSelector((state: RootState) => state.comilerSlice.isOwner);
     useEffect(() => {
         if (urlId) {
             setShareBtn(true)
@@ -115,6 +117,17 @@ const HelperHeader = () => {
         window.navigator.clipboard.writeText(window.location.href);
         toast("Url copy to clipboard !")
     }
+    const handleEditCode = async () => {
+        try {
+            if (urlId) {
+                await editCode({ fullCode, id: urlId }).unwrap();
+                toast("Code Updated Successully!");
+            }
+        } catch (error) {
+            console.log(error);
+            HandleErrors(error);
+        }
+    };
 
     return (
         <div className="__helper_header h-[50px] bg-black text-white p-2 flex justify-between items-center">
@@ -140,6 +153,7 @@ const HelperHeader = () => {
                             <Button onClick={HandleSave} type="submit" size="sm" className="px-3">
                                 Save
                             </Button>
+
                         </div>
                     </DialogContent>
                 </Dialog>
@@ -148,41 +162,52 @@ const HelperHeader = () => {
 
 
                 {
-                    shareBtn && <Dialog>
-                        <DialogTrigger asChild>
-                            <Button className='flex justify-center items-center gap-1' variant="secondary"><Share2 size={16} /></Button>
-                        </DialogTrigger>
-                        <DialogContent className="sm:max-w-md">
-                            <DialogHeader>
-                                <DialogTitle><div className='flex justify-center items-center gap-1'>
+                    shareBtn && (
+                        <>
+                            {isOwner && <Button
+                                onClick={handleEditCode}
+                                variant="default"
+                            >
+                                <PencilLine size={16} />
+                            </Button>}
 
-                                    Share your Code! <Code /></div> </DialogTitle>
-                                <DialogDescription>
-                                    Share this URL with your friend to collaborate
-                                </DialogDescription>
-                            </DialogHeader>
-                            <div className="flex items-center space-x-2">
-                                <div className="grid flex-1 gap-2">
-                                    <Input
-                                        id="link"
-                                        value={window.location.href}
+                            <Dialog>
+                                <DialogTrigger asChild>
+                                    <Button className='flex justify-center items-center gap-1' variant="secondary"><Share2 size={16} /></Button>
+                                </DialogTrigger>
+                                <DialogContent className="sm:max-w-md">
+                                    <DialogHeader>
+                                        <DialogTitle><div className='flex justify-center items-center gap-1'>
 
-                                    />
-                                </div>
-                                <Button onClick={copyURL} type="submit" size="sm" className="px-3">
-                                    <span className="sr-only">Copy</span>
-                                    <CopyIcon className="h-4 w-4" />
-                                </Button>
-                            </div>
-                            <DialogFooter className="sm:justify-start">
-                                <DialogClose asChild>
-                                    <Button type="button" variant="secondary">
-                                        Close
-                                    </Button>
-                                </DialogClose>
-                            </DialogFooter>
-                        </DialogContent>
-                    </Dialog>
+                                            Share your Code! <Code /></div> </DialogTitle>
+                                        <DialogDescription>
+                                            Share this URL with your friend to collaborate
+                                        </DialogDescription>
+                                    </DialogHeader>
+                                    <div className="flex items-center space-x-2">
+                                        <div className="grid flex-1 gap-2">
+                                            <Input
+                                                id="link"
+                                                value={window.location.href}
+
+                                            />
+                                        </div>
+                                        <Button onClick={copyURL} type="submit" size="sm" className="px-3">
+                                            <span className="sr-only">Copy</span>
+                                            <CopyIcon className="h-4 w-4" />
+                                        </Button>
+                                    </div>
+                                    <DialogFooter className="sm:justify-start">
+                                        <DialogClose asChild>
+                                            <Button type="button" variant="secondary">
+                                                Close
+                                            </Button>
+                                        </DialogClose>
+                                    </DialogFooter>
+                                </DialogContent>
+                            </Dialog>
+                        </>
+                    )
                 }
 
 

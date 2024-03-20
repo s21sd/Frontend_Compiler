@@ -9,6 +9,7 @@ import { updateCurrentUser, updateIsLoggedIn } from '@/redux/slices/appSlice'
 import { HandleErrors } from '@/utils/HandleErrors'
 import { toast } from 'sonner'
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { updateIsOwner } from '@/redux/slices/comilerSlice'
 
 const Header = () => {
     const navigator = useNavigate();
@@ -24,6 +25,7 @@ const Header = () => {
             navigator('/');
             dispatch(updateIsLoggedIn(false));
             dispatch(updateCurrentUser({}))
+            dispatch(updateIsOwner(false))
         } catch (error) {
 
             HandleErrors(error);

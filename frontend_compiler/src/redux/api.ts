@@ -1,5 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react"
 import { initialStatetype } from "./slices/comilerSlice"
+import { UserInfoType, loginCredentialType, signupCredentialType } from "@/vite-env";
 
 export const api = createApi({
     baseQuery: fetchBaseQuery({
@@ -34,7 +35,7 @@ export const api = createApi({
             invalidatesTags: ["myCodes"],
         }),
 
-        loadCode: builder.mutation<{ fullCode: initialStatetype["fullCode"] }, { urlId: string }>({
+        loadCode: builder.mutation<{ fullCode: initialStatetype["fullCode"]; isOwner: boolean }, { urlId: string }>({
             query: (body) => ({
                 url: '/compile/load',
                 method: "POST",
@@ -69,10 +70,22 @@ export const api = createApi({
         getUserDetails: builder.query<UserInfoType, void>({
             query: () => ({ url: "/auth/userDetails", cache: "no-store", method: 'GET' })
         }),
-        getMyCodes: builder.query<{ fullCode: initialStatetype["fullCode"] }, void>({
+        getMyCodes: builder.query<{ fullCode: initialStatetype["fullCode"] }[], void>({
             query: () => "/auth/my-codes",
             providesTags: ["myCodes"],
         }),
+
+        getAllCodes: builder.query<
+            Array<{ _id: string; title: string; ownerName: string }>,
+            void
+        >({
+            query: () => ({
+                url: "/compile/get-all-codes",
+                cache: "no-store",
+            }),
+            providesTags: ["allCodes"],
+        }),
+
         deleteCode: builder.mutation<void, string>({
             query: (_id) => ({
                 url: `/compile/delete/${_id}`,
@@ -85,14 +98,20 @@ export const api = createApi({
             { fullCode: initialStatetype["fullCode"]; id: string }
         >({
             query: ({ fullCode, id }) => {
+
                 return {
                     url: `/compile/edit/${id}`,
                     method: "PUT",
-                    body: fullCode,
+                    body: {
+                        "html": fullCode.html,
+                        "css": fullCode.css,
+                        "js": fullCode.javascript,
+
+                    }
                 };
             },
         }),
     })
 })
 
-export const { useSaveCodeMutation, useLoadCodeMutation, useLoginMutation, useSignupMutation, useLogoutMutation, useGetUserDetailsQuery, useGetMyCodesQuery, useDeleteCodeMutation, useEditCodeMutation } = api
+export const { useSaveCodeMutation, useLoadCodeMutation, useLoginMutation, useSignupMutation, useLogoutMutation, useGetUserDetailsQuery, useGetMyCodesQuery, useDeleteCodeMutation, useEditCodeMutation, useGetAllCodesQuery } = api

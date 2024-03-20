@@ -46,7 +46,7 @@ const Signup = () => {
                     navigator('/login');
                 }, 2000);
             }
-            console.log(res);
+            
 
         } catch (error) {
             setLoading(false)

@@ -11,6 +11,7 @@ import {
 } from "./ui/dialog";
 import { HandleErrors } from "@/utils/HandleErrors";
 import { useDeleteCodeMutation } from "@/redux/api";
+import { codeType } from "@/vite-env";
 
 export default function CodeItem({
     data,
@@ -19,13 +20,12 @@ export default function CodeItem({
     data: codeType;
     deleteBtn: boolean;
 }) {
-    console.log(data);
+   
     // const { fullCode } = data;
     const [deleteCode] = useDeleteCodeMutation();
     const handleDelete = async () => {
         try {
-            const response = await deleteCode(data._id!).unwrap();
-            console.log(response);
+            await deleteCode(data._id!).unwrap();
         } catch (error) {
             HandleErrors(error);
         }
@@ -38,7 +38,7 @@ export default function CodeItem({
             </div>
             <Separator />
             <div className="__btn_container flex gap-3">
-                <Link target="_blank" to={`/compiler/${data._id}`}>
+                <Link target="_blank" to={`/compile/${data._id}`}>
                     <Button variant="secondary">Open Code</Button>
                 </Link>
                 {deleteBtn && (

@@ -21,7 +21,7 @@ export const saveCode = async (req: AuthRequest, res: Response) => {
         isAuthenicated = true
     }
     // console.log(req.body);
-    console.log(title);
+    // console.log(title);
     if (!html && !css && !javascript) {
         return res.status(404).send({ message: "Code can not be blank!" })
     }
@@ -38,7 +38,7 @@ export const saveCode = async (req: AuthRequest, res: Response) => {
             title: title
         })
         if (isAuthenicated && user) {
-            console.log(newCode)
+            // console.log(newCode)
             user?.savedCodes.push(newCode._id);
             await user.save();
         }
@@ -47,24 +47,24 @@ export const saveCode = async (req: AuthRequest, res: Response) => {
         return res.status(500).send({ message: "Error in the Saving code", error });
     }
 }
-export const loadCode = async (req: Request, res: Response) => {
+export const loadCode = async (req: AuthRequest, res: Response) => {
     const { urlId } = req.body;
+    const userId = req._id;
+    let isOwner = false;
     try {
         const existingCode = await Code.findById(urlId);
         if (!existingCode) {
-
-            return res.status(401).send({ message: "code not found" });
+            return res.status(404).send({ message: "Code not found" });
         }
-        return res.status(201).send({
-            fullcode: existingCode.fullCode
-        })
+        const user = await User.findById(userId);
+        if (user?.username === existingCode.ownerName) {
+            isOwner = true;
+        }
+        return res.status(200).send({ fullCode: existingCode.fullCode, isOwner });
     } catch (error) {
-        return res.status(500).send({ message: "Error in the Loading code", error });
-
+        return res.status(500).send({ message: "Error loading code", error });
     }
-
-}
-
+};
 
 
 export const getMyCodes = async (req: AuthRequest, res: Response) => {
@@ -135,6 +135,14 @@ export const editCode = async (req: AuthRequest, res: Response) => {
             fullCode: fullCode,
         });
         return res.status(200).send({ message: "Post updated successfully" });
+    } catch (error) {
+        return res.status(500).send({ message: "Error editing code!", error });
+    }
+};
+export const getAllCodes = async (req: Request, res: Response) => {
+    try {
+        const allCodes = await Code.find().sort({ createdAt: -1 });
+        return res.status(200).send(allCodes);
     } catch (error) {
         return res.status(500).send({ message: "Error editing code!", error });
     }
