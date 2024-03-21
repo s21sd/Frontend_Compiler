@@ -16,17 +16,17 @@ const Codeeditor = () => {
         dispatch(updateCodeValue(val))
     }, []);
     return (
-        <div style={{ height: '100vh', overflow: 'auto' }}>
+        <div style={{ height: '100vh', overflow: 'auto',fontSize:'14px' }}>
             <CodeMirror
                 value={fullCode[currLangValue]}
                 height="100vh"
-                width='50vw'
+                width='70vw'
                 extensions={[loadLanguage(currLangValue)!]}
                 onChange={onChange}
                 theme={draculaInit({
                     settings: {
                         caret: '#c6c6c6',
-                        fontFamily: 'monospace',
+                        fontFamily: 'monospace',  
                     },
                     styles: [
                         { tag: t.comment, color: '#6272a4' },
