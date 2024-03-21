@@ -68,7 +68,7 @@ const Header = () => {
                             Logout
                         </Button>
                         <Avatar>
-                            <AvatarImage src={currUser.picture} />
+                            <AvatarImage src="https://github.com/shadcn.png" />
                             <AvatarFallback className='capitalize'>{currUser.username?.slice(0, 1)}</AvatarFallback>
                         </Avatar>
 
