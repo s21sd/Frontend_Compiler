@@ -12,7 +12,8 @@ import {
 import { HandleErrors } from "@/utils/HandleErrors";
 import { useDeleteCodeMutation } from "@/redux/api";
 import { codeType } from "@/vite-env";
-
+import { motion } from 'framer-motion';
+import { transition1 } from "@/pages/Transition";
 export default function CodeItem({
     data,
     deleteBtn,
@@ -20,7 +21,7 @@ export default function CodeItem({
     data: codeType;
     deleteBtn: boolean;
 }) {
-   
+
     // const { fullCode } = data;
     const [deleteCode] = useDeleteCodeMutation();
     const handleDelete = async () => {
@@ -31,7 +32,12 @@ export default function CodeItem({
         }
     };
     return (
-        <div className="p-3 rounded cursor-pointer bg-slate-900 flex justify-start items-center flex-col gap-3">
+        <motion.div
+            initial={{ opacity: 0, y: '-50%' }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: '-50%' }}
+            transition={transition1}
+            className="p-3 rounded cursor-pointer bg-slate-900 flex justify-start items-center flex-col gap-3">
             <div className="__top flex justify-start items-start gap-3 w-full">
                 <Code />
                 <p className="font-mono font-bold text-lg">{data.title}</p>
@@ -73,6 +79,6 @@ export default function CodeItem({
                     </Dialog>
                 )}
             </div>
-        </div>
+        </motion.div>
     );
 }

@@ -9,7 +9,7 @@ export default function Allcodes() {
             {
                 allCodes?.map((codeItem) => {
                     return (
-                        <CodeItem deleteBtn={false} key={codeItem._id} data={codeItem} />
+                        <CodeItem deleteBtn={true} key={codeItem._id} data={codeItem} />
                     );
                 })
             }
