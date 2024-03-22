@@ -4,9 +4,8 @@
   "description": "",
   "main": "index",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "prestart": "chmod -R +x node_modules/.bin/ts-node",
-    "dev": "npx ts-node src/index.ts"
+    "prestart": "chmod +x node_modules/.bin/ts-node",
+    "dev": " ts-node src/index.ts"
   },
   "keywords": [],
   "author": "",
