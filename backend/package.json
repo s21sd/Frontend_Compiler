@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "main": "index",
+  "type": "module",
   "scripts": {
     "prestart": "chmod +x node_modules/.bin/ts-node",
     "dev": "node src/index.ts"
