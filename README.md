@@ -33,7 +33,7 @@ To get started with Your Project Name, follow these steps:
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/your-username/your-repo.git
+   git clone https://github.com/s21sd/Frontend_Compiler
    ```
 
 2. Install dependencies for both frontend and backend:
@@ -73,10 +73,3 @@ Contributions are welcome! If you'd like to contribute to Your Project Name, ple
 5. Push to the branch (`git push origin feature/improvement`).
 6. Create a new Pull Request.
 
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
----
-
-Feel free to customize this README according to your project's specifics and add more detailed instructions or sections as needed.
