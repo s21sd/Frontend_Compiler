@@ -15,7 +15,7 @@ app.use(express_1.default.json());
 app.use((0, cookie_parser_1.default)());
 app.use((0, cors_1.default)({
     credentials: true,
-    origin: 'https://frontend-compiler-m7r6i578c-s21sds-projects.vercel.app'
+    origin: 'https://frontend-compiler.vercel.app'
 }));
 (0, dotenv_1.config)();
 (0, dbConnect_1.connectToDB)();
