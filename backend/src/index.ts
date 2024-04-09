@@ -13,7 +13,7 @@ app.use(cookieParser());
 
 app.use(cors({
     credentials: true,
-    origin: 'https://frontend-compiler.onrender.com'
+    origin: 'https://web-compiler-rgx1qs8uc-s21sds-projects.vercel.app'
 }));
 config();
 
