@@ -4,7 +4,7 @@ import { UserInfoType, loginCredentialType, signupCredentialType } from "@/vite-
 
 export const api = createApi({
     baseQuery: fetchBaseQuery({
-        baseUrl: 'http://localhost:4000',
+        baseUrl: 'https://frontend-compiler.onrender.com',
         prepareHeaders: (headers) => {
             const token = localStorage.getItem('token');
             if (token) {
