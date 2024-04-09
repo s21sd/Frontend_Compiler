@@ -15,7 +15,7 @@ app.use(express_1.default.json());
 app.use((0, cookie_parser_1.default)());
 app.use((0, cors_1.default)({
     credentials: true,
-    origin: 'http://localhost:5173'
+    origin: '*'
 }));
 (0, dotenv_1.config)();
 (0, dbConnect_1.connectToDB)();
