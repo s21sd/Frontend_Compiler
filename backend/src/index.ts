@@ -11,10 +11,16 @@ app.use(express.json());
 app.use(cookieParser());
 
 
+// app.use(cors({
+//     credentials: true,
+//     origin: 'https://web-compiler-rgx1qs8uc-s21sds-projects.vercel.app'
+// }));
 app.use(cors({
     credentials: true,
-    origin: 'https://web-compiler-rgx1qs8uc-s21sds-projects.vercel.app'
+    origin: 'https://web-compiler-rk73yvl65-s21sds-projects.vercel.app'
 }));
+
+
 config();
 
 connectToDB();
