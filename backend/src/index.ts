@@ -13,7 +13,7 @@ app.use(cookieParser());
 
 app.use(cors({
     credentials: true,
-    origin: '*'
+    origin: 'https://frontend-compiler.onrender.com'
 }));
 config();
 
