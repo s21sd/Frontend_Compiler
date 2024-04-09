@@ -17,7 +17,7 @@ app.use(cookieParser());
 // }));
 app.use(cors({
     credentials: true,
-    origin: 'https://web-compiler-rk73yvl65-s21sds-projects.vercel.app'
+    origin: 'https://frontend-compiler-m7r6i578c-s21sds-projects.vercel.app'
 }));
 
 
